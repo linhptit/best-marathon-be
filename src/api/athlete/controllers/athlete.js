@@ -91,14 +91,17 @@ module.exports = createCoreController('api::athlete.athlete', ({ strapi }) => ({
     ctx.send({ athlete });
   },
   async findAllWithBestTimes(ctx) {
-    const { sortDistance } = ctx.query;
+    const { sortDistance, name_contains } = ctx.query;
     const [sortDistanceKey, sortOrder] = sortDistance ? sortDistance.split(':') : [null, null];
 
     const athletes = await strapi.db.query('api::athlete.athlete').findMany({
+      where: name_contains ? { name: { $contains: name_contains } } : {},
       populate: {
         activity_efforts: {
           populate: {
-            activity: true
+            activity: {
+              where: { isValid: true }
+            }
           }
         }
       }
@@ -124,7 +127,7 @@ module.exports = createCoreController('api::athlete.athlete', ({ strapi }) => ({
 
       distances.forEach(distance => {
         const bestEffort = athlete.activity_efforts
-          .filter(effort => effort.distance === distance)
+          .filter(effort => effort.distance === distance && effort.activity?.isValid)
           .sort((a, b) => a.time - b.time)[0];
 
         if (bestEffort) {
@@ -154,6 +157,17 @@ module.exports = createCoreController('api::athlete.athlete', ({ strapi }) => ({
         }
         return timeA - timeB;
       });
+
+      // Add rank based on sorted order
+      if (sortOrder === 'desc') {
+        formattedAthletes.forEach((athlete, index) => {
+          athlete.rank = formattedAthletes.length - index;
+        });
+      } else {
+        formattedAthletes.forEach((athlete, index) => {
+          athlete.rank = index + 1;
+        });
+      }
     }
 
     ctx.send(formattedAthletes);
