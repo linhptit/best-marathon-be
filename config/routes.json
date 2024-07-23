@@ -1,0 +1,25 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/activity-efforts/by-distance",
+      "handler": "activity-effort.findByDistance",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/athletes/best-times",
+          "handler": "athlete.findAllWithBestTimes",
+          "config": {
+            "policies": []
+          }
+        }
+      ]
+    }
+
+  ]
+}

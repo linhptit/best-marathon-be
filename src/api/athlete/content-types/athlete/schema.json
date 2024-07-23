@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "athletes",
+  "info": {
+    "singularName": "athlete",
+    "pluralName": "athletes",
+    "displayName": "Athlete",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "avatar_url": {
+      "type": "string"
+    },
+    "strava_id": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "clubs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::club.club",
+      "mappedBy": "athletes"
+    },
+    "activity_efforts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::activity-effort.activity-effort",
+      "mappedBy": "athlete"
+    }
+  }
+}

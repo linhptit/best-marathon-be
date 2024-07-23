@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clubs",
+  "info": {
+    "singularName": "club",
+    "pluralName": "clubs",
+    "displayName": "Club",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "strava_id": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "athletes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::athlete.athlete",
+      "inversedBy": "clubs"
+    }
+  }
+}

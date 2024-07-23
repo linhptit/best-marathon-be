@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "activity_efforts",
+  "info": {
+    "singularName": "activity-effort",
+    "pluralName": "activity-efforts",
+    "displayName": "Activity Effort",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "distance": {
+      "type": "enumeration",
+      "enum": [
+        "FOUR_HUNDRED_M",
+        "ONE_HALF_MILE",
+        "ONE_K",
+        "ONE_MILE",
+        "TWO_MILE",
+        "FIVE_K",
+        "TEN_K",
+        "FIFTEEN_K",
+        "TEN_MILE",
+        "TWENTY_K",
+        "HALF_MARATHON",
+        "MARATHON"
+      ]
+    },
+    "time": {
+      "type": "biginteger"
+    },
+    "activity": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::activity.activity",
+      "inversedBy": "activity_efforts"
+    },
+    "athlete": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::athlete.athlete",
+      "inversedBy": "activity_efforts"
+    }
+  }
+}

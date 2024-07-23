@@ -788,6 +788,174 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface ApiActivityActivity extends Schema.CollectionType {
+  collectionName: 'activities';
+  info: {
+    singularName: 'activity';
+    pluralName: 'activities';
+    displayName: 'Activity';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String;
+    strava_id: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    athlete: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'api::athlete.athlete'
+    >;
+    activity_efforts: Attribute.Relation<
+      'api::activity.activity',
+      'oneToMany',
+      'api::activity-effort.activity-effort'
+    >;
+    isValid: Attribute.Boolean & Attribute.DefaultTo<true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiActivityEffortActivityEffort extends Schema.CollectionType {
+  collectionName: 'activity_efforts';
+  info: {
+    singularName: 'activity-effort';
+    pluralName: 'activity-efforts';
+    displayName: 'Activity Effort';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    distance: Attribute.Enumeration<
+      [
+        'FOUR_HUNDRED_M',
+        'ONE_HALF_MILE',
+        'ONE_K',
+        'ONE_MILE',
+        'TWO_MILE',
+        'FIVE_K',
+        'TEN_K',
+        'FIFTEEN_K',
+        'TEN_MILE',
+        'TWENTY_K',
+        'HALF_MARATHON',
+        'MARATHON'
+      ]
+    >;
+    time: Attribute.BigInteger;
+    activity: Attribute.Relation<
+      'api::activity-effort.activity-effort',
+      'manyToOne',
+      'api::activity.activity'
+    >;
+    athlete: Attribute.Relation<
+      'api::activity-effort.activity-effort',
+      'manyToOne',
+      'api::athlete.athlete'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::activity-effort.activity-effort',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::activity-effort.activity-effort',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiAthleteAthlete extends Schema.CollectionType {
+  collectionName: 'athletes';
+  info: {
+    singularName: 'athlete';
+    pluralName: 'athletes';
+    displayName: 'Athlete';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String;
+    avatar_url: Attribute.String;
+    strava_id: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    clubs: Attribute.Relation<
+      'api::athlete.athlete',
+      'manyToMany',
+      'api::club.club'
+    >;
+    activity_efforts: Attribute.Relation<
+      'api::athlete.athlete',
+      'oneToMany',
+      'api::activity-effort.activity-effort'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::athlete.athlete',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::athlete.athlete',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiClubClub extends Schema.CollectionType {
+  collectionName: 'clubs';
+  info: {
+    singularName: 'club';
+    pluralName: 'clubs';
+    displayName: 'Club';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String;
+    strava_id: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    athletes: Attribute.Relation<
+      'api::club.club',
+      'manyToMany',
+      'api::athlete.athlete'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::club.club', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::club.club', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -806,6 +974,10 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
+      'api::activity.activity': ApiActivityActivity;
+      'api::activity-effort.activity-effort': ApiActivityEffortActivityEffort;
+      'api::athlete.athlete': ApiAthleteAthlete;
+      'api::club.club': ApiClubClub;
     }
   }
 }
