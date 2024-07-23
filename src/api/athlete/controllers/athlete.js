@@ -139,6 +139,7 @@ module.exports = createCoreController('api::athlete.athlete', ({ strapi }) => ({
         id: athlete.id,
         name: athlete.name,
         avatar_url: athlete.avatar_url,
+        strava_id: athlete.strava_id,
         best_times: bestTimes
       };
     });
