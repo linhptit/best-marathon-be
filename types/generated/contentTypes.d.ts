@@ -869,6 +869,7 @@ export interface ApiActivityEffortActivityEffort extends Schema.CollectionType {
       'manyToOne',
       'api::athlete.athlete'
     >;
+    isValid: Attribute.Boolean & Attribute.DefaultTo<true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

@@ -43,6 +43,10 @@
       "relation": "manyToOne",
       "target": "api::athlete.athlete",
       "inversedBy": "activity_efforts"
+    },
+    "isValid": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
